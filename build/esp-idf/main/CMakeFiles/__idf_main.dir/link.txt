@@ -1,2 +1,0 @@
-/home/nix/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-ar qc libmain.a  CMakeFiles/__idf_main.dir/main.cpp.obj CMakeFiles/__idf_main.dir/__/components/tasker/tasker.cpp.obj CMakeFiles/__idf_main.dir/__/components/btc/btc.cpp.obj CMakeFiles/__idf_main.dir/__/components/wifi/station.cpp.obj CMakeFiles/__idf_main.dir/__/components/rest/rest.cpp.obj
-/home/nix/esp/xtensa-esp32-elf/bin/xtensa-esp32-elf-ranlib libmain.a
