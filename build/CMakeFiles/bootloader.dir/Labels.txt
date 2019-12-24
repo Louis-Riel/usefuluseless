@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/CMakeFiles/bootloader
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/CMakeFiles/bootloader.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/CMakeFiles/bootloader-complete.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/nix/Documents/PlatformIO/Projects/usefulUseless/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule

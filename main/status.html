@@ -1,0 +1,292 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+    body {
+        background-color: black;
+        color: #73de73;
+    }
+    
+    section.label {
+        padding-right: 10px;
+        text-align: center;
+        border-bottom-style: outset;
+        margin-bottom: 10px;
+    }
+    
+    div.value {
+        padding-right: 10px;
+        min-height: 20px;
+    }
+    
+    div.devicePanel {
+        float: left;
+        border-radius: 25px;
+        background: #171717;
+        padding: 10px;
+        margin: 2px;
+        border-style: dashed;
+        margin: 10px;
+        margin: 10p;
+        margin: 10;
+        margin: 1;
+        /* width: 100%; */
+    }
+    
+    div.devicePanel>section {
+        float: left;
+    }
+    
+    section#rssi>div: {
+        border-right-style: none;
+    }
+    
+    .hideinactive .inactivedevice {
+        display: none;
+    }
+    
+    .hide {
+        display: none;
+    }
+    
+    div {
+        transition: all 2s;
+    }
+    
+    .face {
+        border-radius: 50%;
+        height: 120px;
+        width: 130px;
+        float: left;
+        margin: 10px;
+    }
+    
+    .face {
+        background: #81f796;
+    }
+    
+    .face[cod="ffffffff"] {
+        background: #eeeeee;
+        border: 3px solid #43dcb9;
+    }
+    
+    .device_carousel {
+        /* float: left; */
+    }
+    
+    .face div {
+        display: none;
+        font-family: serif;
+        position: absolute;
+        color: black;
+        /* border-style: dashed; */
+        width: 130px;
+        text-align: center;
+    }
+    
+    .face .baddr {
+        display: block;
+        font-size: small;
+        margin-top: 45px;
+        font-family: monospace;
+    }
+    
+    .face .name {
+        display: block;
+        font-size: small;
+        color: #e00f0f;
+        overflow-wrap: break-word;
+        margin-top: 58px;
+    }
+    
+    .face .rssi {
+        display: block;
+        font-size: smaller;
+        color: #114e19;
+        margin-top: 100px;
+    }
+    
+    .face[present="false"] {
+        opacity: 45%;
+        transform: scale(0.9, 0.8);
+    }
+    
+    .face .since {
+        display: block;
+        font-size: smaller;
+        margin-top: 8px;
+    }
+    
+    .face .spent {
+        display: block;
+        font-size: smaller;
+        margin-top: 20px;
+    }
+    
+    .face .last {
+        display: block;
+        font-size: smaller;
+        margin-top: 88px;
+    }
+    
+    .face .since {
+        color: #ec2f2f;
+    }
+    
+    .face[since^="00:1"] .since {
+        color: orange;
+    }
+    
+    .face[since^="00:0"] .since {
+        color: green;
+    }
+    
+    .face[since^="00:"] .since {
+        color: #e8742c;
+    }
+    
+    .face[since^="00:00"] .since {
+        color: black;
+    }
+    
+    .hideinactive div[present="false"] {
+        transform: scale(0);
+        width: 0px;
+        height: 0px;
+    }
+    
+    .hide {
+        display: none;
+        transition: 3;
+        ;
+    }
+</style>
+
+<script type="text/javascript">
+    var request = new Request("/rest", {
+        method: 'GET',
+        headers: new Headers()
+    });
+    request.headers.append("Access-Control-Allow-Origin", "*");
+
+    function toggleHideInactive(toggle) {
+        if (toggle.checked) {
+            console.log("toggles on");
+            document.body.classList.remove("hideinactive");
+        } else {
+            console.log("toggles off");
+            document.body.classList.add("hideinactive");
+        }
+    }
+
+    function toggleBtListView(toggle) {
+        if (toggle.checked) {
+            console.log("toggles on");
+            document.getElementById('devices').classList.remove("hide");
+        } else {
+            console.log("toggles off");
+            document.getElementById('devices').classList.add("hide");
+        }
+    }
+
+    function refreshDeviceList(deviceList) {
+        var ul = document.getElementById('devices');
+        Object.keys(deviceList.devices[0]).forEach(function(key) {
+            var item = ul.getElementsByClassName(key)[0];
+            if (item == undefined) {
+                item = document.createElement("section");
+                item.classList.add(key);
+                item.id = key;
+                ul.appendChild(item);
+                var label = document.createElement("section");
+                label.classList.add("label");
+                label.appendChild(document.createTextNode(key));
+                item.appendChild(label);
+                console.log("adding key" + key);
+            }
+            deviceList.devices.forEach(device => {
+                var li = document.getElementById(device.baddr + key);
+                if (li == undefined) {
+                    li = document.createElement("div");
+                    item.appendChild(li);
+                    li.classList.add("value");
+                    li.classList.add(device.baddr);
+                    li.id = device.baddr + key;
+                    li.appendChild(document.createTextNode(device[key]));
+                } else {
+                    li.childNodes.forEach(node => {
+                        node.textContent = device[key];
+                    });
+                }
+                if (device.present) {
+                    li.classList.add("activedevice");
+                    li.classList.remove("inactivedevice");
+                } else {
+                    li.classList.add("inactivedevice");
+                    li.classList.remove("activedevice");
+                }
+            });
+        });
+    }
+
+    function refreshDeviceCarousel(deviceList) {
+        var ul = document.getElementById('device_carousel');
+
+        deviceList.devices.forEach(device => {
+            var li = document.getElementById(device.baddr + "-dev");
+            if (li == undefined) {
+                li = document.createElement("div");
+                ul.appendChild(li);
+                li.classList.add("face");
+                li.classList.add(device.baddr);
+                li.id = device.baddr + "-dev";
+            }
+            Object.keys(device).forEach(function(key) {
+                Object.keys(device).forEach(function(key) {
+                    li.setAttribute(key, device[key]);
+                    var dctl = document.getElementById(device.baddr + "-dev-" + key);
+                    if (dctl == undefined) {
+                        dctl = document.createElement("div");
+                        li.appendChild(dctl);
+                        dctl.classList.add(key);
+                        dctl.id = device.baddr + "-dev-" + key;
+                        dctl.appendChild(document.createTextNode(device[key]));
+                    } else {
+                        dctl.textContent = device[key];
+                    }
+                });
+            });
+
+        });
+    }
+
+    function refreshDevices() {
+        fetch(request)
+            .then(resp => {
+                return resp.json();
+            }).then(deviceList => {
+                refreshDeviceList(deviceList);
+                refreshDeviceCarousel(deviceList);
+                setTimeout(refreshDevices, 2000);
+            }).catch(err => {
+                console.error(err);
+                setTimeout(refreshDevices, 2000);
+            });
+    }
+</script>
+
+<head>
+    <title>Status Page</title>
+
+    <body onload="refreshDevices()">
+        <div class="onoffswitch">
+            <input id="hideinactives" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" checked="Y" onclick="toggleHideInactive(this)" id="hideinactives">
+            <label class="onoffswitch-label" for="hideinactives">Show Inactives</label>
+            <input id="hidebtlist" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" checked="Y" onclick="toggleBtListView(this)" id="hideinactives">
+            <label class="onoffswitch-label" for="hideinactives">Show List</label>
+        </div>
+        <section>
+            <div class="devicePanel" id="devices" deviceList="[]"></div>
+            <div class="device_carousel" id="device_carousel" deviceList="[]"></div>
+        </section>
+    </body>
+</head>

@@ -1,0 +1,96 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+    body {
+        background-color: black;
+        color: #14fb14;
+    }
+    
+    fieldset {
+        border-radius: 25px;
+        float: left;
+    }
+    
+    fieldset input select {
+        float: right;
+    }
+    
+    .paramline {
+        padding-bottom: 15px;
+    }
+    
+    section.paramline select {
+        width: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+    function getConfig() {
+        var request = new Request("/rest/config", {
+            method: 'GET',
+            headers: new Headers()
+        });
+        request.headers.append("Access-Control-Allow-Origin", "*");
+        fetch(request)
+            .then(resp => {
+                return resp.json();
+            }).then(config => {
+                document.getElementById("wifitype").value = config.wifi.type;
+                document.getElementById("wifiname").value = config.wifi.name;
+                document.getElementById("wifipwd").value = config.wifi.password;
+                document.getElementById("wifi_workperiod").value = config.wifi.workperiod;
+                document.getElementById("wifi_scanperiod").value = config.wifi.scanperiod;
+                document.getElementById("bt_workperiod").value = config.bt.workperiod;
+                document.getElementById("bt_scanperiod").value = config.bt.scanperiod;
+            }).catch(err => {
+                console.error(err);
+            });
+    }
+</script>
+
+<head>
+    <title>Useless Useful Configuration Page</title>
+
+    <body onload="getConfig()">
+        <form method="post">
+            <fieldset>
+                <legend>Wifi Configuration</legend>
+                <section class="paramline">
+                    <section><label for="wifitype">Wifi Type</label></section>
+                    <section><select id="wifitype" name="wifitype">
+                        <option value="2">Wifi Router</option>
+                        <option value="1">Wifi Client</option>
+                        </select></section>
+                </section>
+                <section class="paramline">
+                    <section><label for="wifiname">Wifi Name</label></section>
+                    <section><input type="text" id="wifiname" name="wifiname"></section>
+                </section>
+                <section class="paramline">
+                    <section><label for="wifipwd">Wifi Password</label></section>
+                    <section><input type="text" id="wifipwd" name="wifipwd"></section>
+                </section>
+                <section class="paramline">
+                    <section><label for="wifi_workperiod">Work Period(secs)</label></section>
+                    <section><input type="number" id="wifi_workperiod" name="wifi_workperiod"></section>
+                </section>
+                <section class="paramline">
+                    <section><label for="wifi_scanperiod">Scan Period(ms)</label></section>
+                    <section><input type="number" id="wifi_scanperiod" name="wifi_scanperiod"></section>
+                </section>
+            </fieldset>
+            <fieldset>
+                <legend>Bluetooth Configuration</legend>
+                <section class="paramline">
+                    <section><label for="bt_workperiod">Work Period(secs)</label></section>
+                    <section><input type="number" id="bt_workperiod" name="bt_workperiod"></section>
+                </section>
+                <section class="paramline">
+                    <section><label for="bt_scanperiod">Scan Period(secs)</label></section>
+                    <section><input type="number" id="bt_scanperiod" name="bt_scanperiod"></section>
+                </section>
+            </fieldset>
+            <button type="submit">Save</button>
+        </form>
+    </body>
+</head>
